@@ -1,6 +1,6 @@
 {
   "name": "mermaid-3d",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Drop-in replacement for Mermaid.js that renders diagrams in isometric 3D style with floating shadows, pan, zoom, and fly-to interactions",
   "type": "module",
   "main": "dist/mermaid-3d.umd.js",
