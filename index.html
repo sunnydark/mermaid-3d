@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mermaid-3D Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      padding: 12px 24px;
+      background: #16213e;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    header h1 { font-size: 20px; font-weight: 600; color: #e94560; }
+    header h1 span { color: #0f3460; }
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+      align-items: center;
+    }
+    .controls label { font-size: 13px; color: #aaa; }
+    .controls select {
+      background: #0f3460;
+      color: #e0e0e0;
+      border: 1px solid #444;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    .controls button {
+      background: #e94560;
+      color: #fff;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .controls button:hover { background: #c73e54; }
+    main { display: flex; flex: 1; overflow: hidden; }
+    .editor-panel {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #333;
+      flex-shrink: 0;
+    }
+    .editor-panel h2 {
+      padding: 8px 16px;
+      font-size: 13px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: #16213e;
+    }
+    .examples {
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      border-bottom: 1px solid #333;
+      background: #16213e;
+    }
+    .examples button {
+      background: #0f3460;
+      color: #ccc;
+      border: 1px solid #333;
+      padding: 3px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .examples button:hover { background: #1a4a80; color: #fff; }
+    textarea {
+      flex: 1;
+      background: #0a0a1a;
+      color: #e0e0e0;
+      border: none;
+      padding: 16px;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      resize: none;
+      outline: none;
+    }
+    .render-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .render-panel h2 {
+      padding: 8px 16px;
+      font-size: 13px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: #16213e;
+    }
+    #diagram-container {
+      flex: 1;
+      position: relative;
+      background: #f4f4f4;
+      overflow: auto;
+    }
+    .error-banner {
+      display: none;
+      padding: 8px 16px;
+      background: #442222;
+      color: #ff8888;
+      font-size: 12px;
+      border-bottom: 1px solid #663333;
+    }
+    .error-banner.visible { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mermaid<span>-3D</span></h1>
+    <div class="controls">
+      <label for="theme-select">Theme:</label>
+      <select id="theme-select">
+        <option value="default">Default</option>
+        <option value="dark">Dark</option>
+        <option value="forest">Forest</option>
+        <option value="neutral">Neutral</option>
+        <option value="base">Base</option>
+      </select>
+      <label for="shadows-toggle" style="display:flex;align-items:center;gap:4px;cursor:pointer;">
+        <input type="checkbox" id="shadows-toggle" checked style="cursor:pointer;" />
+        Shadows
+      </label>
+      <button id="render-btn">Render</button>
+    </div>
+  </header>
+  <main>
+    <div class="editor-panel">
+      <h2>Mermaid Source</h2>
+      <div class="examples">
+        <button data-example="flowchart">Flowchart</button>
+        <button data-example="sequence">Sequence</button>
+        <button data-example="class">Class</button>
+        <button data-example="state">State</button>
+        <button data-example="er">ER</button>
+        <button data-example="gantt">Gantt</button>
+        <button data-example="pie">Pie</button>
+        <button data-example="gitgraph">Git Graph</button>
+        <button data-example="mindmap">Mindmap</button>
+        <button data-example="timeline">Timeline</button>
+        <button data-example="journey">Journey</button>
+      </div>
+      <textarea id="editor" spellcheck="false">flowchart TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> B
+    C --> E[Deploy]
+    E --> F((Done))</textarea>
+    </div>
+    <div class="render-panel">
+      <h2>3D Preview</h2>
+      <div id="error-banner" class="error-banner"></div>
+      <div id="diagram-container"></div>
+    </div>
+  </main>
+
+  <script type="module">
+    import mermaid3d from './src/index.ts';
+
+    const examples = {
+      flowchart: `flowchart TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> B
+    C --> E[Deploy]
+    E --> F((Done))`,
+      sequence: `sequenceDiagram
+    Alice->>John: Hello John
+    John-->>Alice: Hi Alice
+    Alice->>John: How are you?
+    John-->>Alice: I'm good!`,
+      class: `classDiagram
+    Animal <|-- Duck
+    Animal <|-- Fish
+    Animal : +int age
+    Animal : +String gender
+    Animal : +isMammal()
+    Duck : +String beakColor
+    Duck : +swim()
+    Fish : +int sizeInFeet
+    Fish : +canEat()`,
+      state: `stateDiagram-v2
+    [*] --> Still
+    Still --> [*]
+    Still --> Moving
+    Moving --> Still
+    Moving --> Crash
+    Crash --> [*]`,
+      er: `erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ LINE-ITEM : contains
+    CUSTOMER }|..|{ DELIVERY-ADDRESS : uses`,
+      gantt: `gantt
+    title A Gantt Diagram
+    section Section
+        A task          :a1, 2024-01-01, 30d
+        Another task    :after a1, 20d
+    section Another
+        Task in Another :2024-01-12, 12d
+        another task    :24d`,
+      pie: `pie title Pets adopted by volunteers
+    "Dogs" : 386
+    "Cats" : 85
+    "Rats" : 15`,
+      gitgraph: `gitGraph
+    commit
+    commit
+    branch develop
+    commit
+    commit
+    checkout main
+    commit
+    merge develop
+    commit`,
+      mindmap: `mindmap
+    root((Central Idea))
+        Topic A
+            Subtopic 1
+            Subtopic 2
+        Topic B
+            Subtopic 3
+        Topic C`,
+      timeline: `timeline
+    title Timeline of Events
+    2020 : Event A
+         : Event B
+    2021 : Event C
+    2022 : Event D
+         : Event E`,
+      journey: `journey
+    title My working day
+    section Go to work
+        Make tea: 5: Me
+        Go upstairs: 3: Me
+        Do work: 1: Me, Cat
+    section Go home
+        Go downstairs: 5: Me
+        Sit down: 5: Me`,
+    };
+
+    let currentTheme = 'default';
+
+    mermaid3d.initialize({ theme: currentTheme, shadows: true });
+
+    async function renderDiagram() {
+      const editor = document.getElementById('editor');
+      const container = document.getElementById('diagram-container');
+      const errorBanner = document.getElementById('error-banner');
+      const text = editor.value.trim();
+
+      if (!text) return;
+
+      errorBanner.classList.remove('visible');
+      errorBanner.textContent = '';
+      container.innerHTML = '';
+
+      try {
+        await mermaid3d.render('demo-diagram', text, container);
+      } catch (err) {
+        errorBanner.textContent = `Error: ${err.message || err}`;
+        errorBanner.classList.add('visible');
+        console.error('Render error:', err);
+      }
+    }
+
+    document.getElementById('render-btn').addEventListener('click', renderDiagram);
+
+    document.getElementById('theme-select').addEventListener('change', (e) => {
+      currentTheme = e.target.value;
+      mermaid3d.initialize({ theme: currentTheme, shadows: document.getElementById('shadows-toggle').checked });
+      renderDiagram();
+    });
+
+    document.getElementById('shadows-toggle').addEventListener('change', (e) => {
+      mermaid3d.initialize({ theme: currentTheme, shadows: e.target.checked });
+      renderDiagram();
+    });
+
+    document.querySelectorAll('.examples button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.example;
+        if (examples[key]) {
+          document.getElementById('editor').value = examples[key];
+          renderDiagram();
+        }
+      });
+    });
+
+    document.getElementById('editor').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        renderDiagram();
+      }
+    });
+
+    renderDiagram();
+  </script>
+</body>
+</html>
