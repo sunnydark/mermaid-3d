@@ -1,10 +1,15 @@
 # mermaid-3d
 
+[![npm version](https://img.shields.io/npm/v/mermaid-3d)](https://www.npmjs.com/package/mermaid-3d)
+[![npm downloads](https://img.shields.io/npm/dm/mermaid-3d)](https://www.npmjs.com/package/mermaid-3d)
+[![license](https://img.shields.io/npm/l/mermaid-3d)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/sunnydark/mermaid-3d)](https://github.com/sunnydark/mermaid-3d)
+
 Drop-in replacement for [Mermaid.js](https://mermaid.js.org/) that renders any diagram in an **isometric 3D style** — floating shadows, vector-crisp zoom, pan, and fly-to animations. Swap one import and your flat diagrams become isometric.
 
 **[Live Demo](https://sunnydark.github.io/mermaid-3d/)** | **[npm](https://www.npmjs.com/package/mermaid-3d)**
 
-![mermaid-3d demo](https://raw.githubusercontent.com/sunnydark/mermaid-3d/master/assets/demo.png)
+![mermaid-3d demo](https://raw.githubusercontent.com/sunnydark/mermaid-3d/master/assets/demo.gif)
 
 ## Features
 
