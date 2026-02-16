@@ -1,6 +1,6 @@
 {
   "name": "mermaid-3d",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Drop-in replacement for Mermaid.js that renders diagrams in isometric 3D style with floating shadows, pan, zoom, and fly-to interactions",
   "type": "module",
   "main": "dist/mermaid-3d.umd.js",
@@ -24,11 +24,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SunnyDark/mermaid-3d.git"
+    "url": "git+https://github.com/sunnydark/mermaid-3d.git"
   },
-  "homepage": "https://github.com/SunnyDark/mermaid-3d#readme",
+  "homepage": "https://github.com/sunnydark/mermaid-3d#readme",
   "bugs": {
-    "url": "https://github.com/SunnyDark/mermaid-3d/issues"
+    "url": "https://github.com/sunnydark/mermaid-3d/issues"
   },
   "keywords": [
     "mermaid",
