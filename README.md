@@ -2,7 +2,7 @@
 
 Drop-in replacement for [Mermaid.js](https://mermaid.js.org/) that renders any diagram in an **isometric 3D style** — floating shadows, vector-crisp zoom, pan, and fly-to animations. Swap one import and your flat diagrams become isometric.
 
-![mermaid-3d demo](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/main/assets/demo.png)
+![mermaid-3d demo](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/demo.png)
 
 ## Features
 
@@ -137,17 +137,20 @@ console.log(diagramType); // 'flowchart'
 
 All Mermaid diagram types render in isometric 3D:
 
-- Flowchart
-- Sequence Diagram
-- Class Diagram
-- State Diagram
-- Entity Relationship (ER)
-- Gantt Chart
-- Pie Chart
-- Git Graph
-- Mindmap
-- Timeline
-- User Journey
+| | |
+|:---:|:---:|
+| **Flowchart** | **Sequence Diagram** |
+| ![Flowchart](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/flowchart.png) | ![Sequence](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/sequence.png) |
+| **Class Diagram** | **State Diagram** |
+| ![Class](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/class.png) | ![State](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/state.png) |
+| **Entity Relationship** | **Gantt Chart** |
+| ![ER](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/er.png) | ![Gantt](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/gantt.png) |
+| **Pie Chart** | **Git Graph** |
+| ![Pie](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/pie.png) | ![Git Graph](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/gitgraph.png) |
+| **Mindmap** | **Timeline** |
+| ![Mindmap](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/mindmap.png) | ![Timeline](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/timeline.png) |
+| **User Journey** | |
+| ![Journey](https://raw.githubusercontent.com/SunnyDark/mermaid-3d/master/assets/journey.png) | |
 
 ## How It Works
 
