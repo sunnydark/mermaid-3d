@@ -2,6 +2,8 @@
 
 Drop-in replacement for [Mermaid.js](https://mermaid.js.org/) that renders any diagram in an **isometric 3D style** — floating shadows, vector-crisp zoom, pan, and fly-to animations. Swap one import and your flat diagrams become isometric.
 
+**[Live Demo](https://sunnydark.github.io/mermaid-3d/)** | **[npm](https://www.npmjs.com/package/mermaid-3d)**
+
 ![mermaid-3d demo](https://raw.githubusercontent.com/sunnydark/mermaid-3d/master/assets/demo.png)
 
 ## Features
