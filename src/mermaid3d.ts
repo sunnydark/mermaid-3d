@@ -10,8 +10,15 @@ let mermaidLib: any = null;
 
 async function ensureMermaid() {
   if (!mermaidLib) {
-    const m = await import('mermaid');
-    mermaidLib = m.default || m;
+    // Check for global mermaid first (UMD/CDN usage where mermaid is loaded
+    // via <script> tag). Dynamic import('mermaid') fails from cross-origin
+    // CDN scripts because bare specifier resolution uses about:blank as base.
+    if (typeof window !== 'undefined' && (window as any).mermaid) {
+      mermaidLib = (window as any).mermaid;
+    } else {
+      const m = await import('mermaid');
+      mermaidLib = m.default || m;
+    }
     mermaidLib.initialize({
       startOnLoad: false,
       securityLevel: 'loose',
@@ -466,8 +473,8 @@ function createContainer(id: string): HTMLDivElement {
   const container = document.createElement('div');
   container.id = id;
   container.className = 'mermaid-3d-container';
-  container.style.position = 'absolute';
-  container.style.inset = '0';
+  // position: relative is set via the STYLES class rule above.
+  // Do NOT set position: absolute / inset: 0 — that breaks document flow.
   return container;
 }
 
@@ -498,7 +505,12 @@ const mermaid3d = {
     }
 
     const svgEl = container.querySelector('svg');
-    if (svgEl) {
+
+    // finalize() applies the isometric transform, shadows, and pan/zoom.
+    // It MUST be called after the container is in the DOM, because
+    // getBBox() returns zeros on detached elements.
+    const finalize = () => {
+      if (!svgEl) return;
       // Remove mermaid's fixed/max dimensions so SVG fills container
       svgEl.removeAttribute('width');
       svgEl.removeAttribute('height');
@@ -514,12 +526,19 @@ const mermaid3d = {
 
       // Wire up viewBox-based pan & zoom (also centers the content)
       setupPanZoom(container, svgEl);
+    };
+
+    // If the container was appended to a parent (containerElement),
+    // it's in the DOM now — finalize immediately.
+    if (containerElement) {
+      finalize();
     }
 
     return {
       svg,
       element: container,
       bindFunctions: (_el: Element) => {},
+      finalize,
     };
   },
 
@@ -543,6 +562,9 @@ const mermaid3d = {
         if (parent) {
           result.element.id = id;
           parent.replaceChild(result.element, element);
+          // Now that the element is in the DOM, finalize applies the
+          // isometric transform and pan/zoom (getBBox needs a live element).
+          result.finalize();
         }
 
         if (options?.postRenderCallback) {

@@ -55,6 +55,9 @@ export interface RenderResult {
   svg: string;
   element: HTMLDivElement;
   bindFunctions?: (element: Element) => void;
+  /** Call after inserting `element` into the DOM to apply isometric transform + pan/zoom.
+   *  Automatically called if `containerElement` was passed to `render()`. */
+  finalize: () => void;
 }
 
 export interface RunOptions {
